@@ -21,11 +21,16 @@ public class PlayerInput : MonoBehaviour
     public float Dup;
     public float Dright;
     public float Dmag;
+    /**
+     * <summary> move direction </summary>
+     */
     public Vector3 Dvec;
 
     // 1.pressing signal
     public bool run;
     // 2. trigger once type siganl
+    public bool isJump;
+    private bool lastJump;
     // 3. double trigger
 
     [Header("===== Others =====")]
@@ -67,10 +72,27 @@ public class PlayerInput : MonoBehaviour
         //tmp.Normalize();
         //Dmag = tmp.magnitude > 0.01f ? tmp.magnitude : 0;
         //Debug.Log(tmp.magnitude);
-        Dmag = Mathf.Sqrt(Dup * Dup + Dright * Dright);
-        Dvec = Dright * transform.right + Dup * transform.forward;
+        
+        /**
+         * square vec to circle vec
+         */
+        Vector2 tempDAxis = SquareToCircle(new Vector2(Dright, Dup));
+        float tempDright = tempDAxis.x;
+        float tempDup = tempDAxis.y;
+
+        Dmag = Mathf.Sqrt(tempDright*tempDright + tempDup*tempDup);
+        Dvec = tempDright * transform.right + tempDup * transform.forward;
         //Debug.Log("Dup: " + Dup);
 
         run = Input.GetKey(keyA);
+    }
+
+    private Vector2 SquareToCircle(Vector2 input)
+    {
+        Vector2 output = Vector2.zero;
+        output.x = input.x * Mathf.Sqrt(1 - (input.y * input.y) / 2.0f);
+        output.y = input.y * Mathf.Sqrt(1 - (input.x * input.x) / 2.0f);
+
+        return output;
     }
 }

@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class ActorController : MonoBehaviour
 {
+    /**
+     * <summary> The model of Actor. </summary>
+     */
     public GameObject model;
     public PlayerInput pi;
     public float walkSpeed = 1.35f;
+    public float runMultiplier = 2.7f;
 
     [SerializeField]            // 让变量可见，该变量必须被编译器支持
     private Animator anim;
@@ -33,11 +37,13 @@ public class ActorController : MonoBehaviour
     // Update is called once per frame
     void Update()                               // update for scene to display 60 times pre second
     {
-        anim.SetFloat("forward", pi.Dmag * (pi.run ? 2.0f : 1.0f));
+        float targetRunMulti = pi.Dmag * (pi.run ? 2.0f : 1.0f);
+        anim.SetFloat("forward", Mathf.Lerp(anim.GetFloat("forward"), targetRunMulti, 0.3f) );
         if(pi.Dvec.magnitude > 0.01f)
         {
-            anim.transform.forward = pi.Dvec;
-            movingVec = pi.Dmag * model.transform.forward * walkSpeed * (pi.run ? 2.0f : 1.0f);
+            Vector3 targetForward = Vector3.Slerp(model.transform.forward, pi.Dvec, 0.1f);   // lerp as a vector not a point
+            anim.transform.forward = targetForward;
+            movingVec = pi.Dmag * model.transform.forward * walkSpeed * (pi.run ? runMultiplier : 1.0f);
         }
     }
 

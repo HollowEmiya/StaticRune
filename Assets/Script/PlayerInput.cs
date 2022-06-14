@@ -30,7 +30,7 @@ public class PlayerInput : MonoBehaviour
     public bool run;
     // 2. trigger once type siganl
     public bool isJump;
-    private bool lastJump;
+    // private bool lastJump;           // for simulate Input.GetKeyDown()
     // 3. double trigger
 
     [Header("===== Others =====")]
@@ -85,6 +85,28 @@ public class PlayerInput : MonoBehaviour
         //Debug.Log("Dup: " + Dup);
 
         run = Input.GetKey(keyA);
+
+        bool tempJump = Input.GetKey(keyB);
+        isJump = Input.GetKeyDown(keyB);
+        if (isJump)
+        {
+            Debug.Log("Jumping!!!!");
+        }
+
+        /**
+         * for GetKeyDown
+         */
+        //if (tempJump != lastJump && tempJump)
+        //{
+        //    isJump = true;
+        //    Debug.Log("Jump Tigger!!!!!");
+        //}
+        //else
+        //{
+        //    isJump = false;
+        //}
+        //lastJump = tempJump;
+
     }
 
     private Vector2 SquareToCircle(Vector2 input)

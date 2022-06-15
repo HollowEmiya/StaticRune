@@ -90,7 +90,7 @@ public class PlayerInput : MonoBehaviour
         isJump = Input.GetKeyDown(keyB);
         if (isJump)
         {
-            Debug.Log("Jumping!!!!");
+            
         }
 
         /**

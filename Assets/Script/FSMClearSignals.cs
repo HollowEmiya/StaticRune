@@ -26,6 +26,9 @@ public class FSMClearSignals : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        /**
+         * <summary> reset trigger </summary>
+         */
         foreach(string signal in clearAtExit)
         {
             animator.ResetTrigger(signal);

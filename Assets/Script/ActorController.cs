@@ -12,6 +12,7 @@ public class ActorController : MonoBehaviour
     public float walkSpeed = 1.35f;
     public float runMultiplier = 2.7f;
     public float jumpVelocity = 5.0f;
+    public float rollLimiteSpeed = 10.0f;
 
     [SerializeField]            // 让变量可见，该变量必须被编译器支持
     private Animator anim;
@@ -43,6 +44,17 @@ public class ActorController : MonoBehaviour
     {
         float targetRunMulti = pi.Dmag * (pi.run ? 2.0f : 1.0f);
         anim.SetFloat("forward", Mathf.Lerp(anim.GetFloat("forward"), targetRunMulti, 0.3f) );
+        /**
+         * <sumary> roll </sumary>
+         */
+        if(rigid.velocity.magnitude > rollLimiteSpeed)
+        {
+            anim.SetTrigger("roll");
+        }
+        
+        /**
+         * <summary> jump </summary>
+         */
         if (pi.isJump)
         {
             anim.SetTrigger("jump");

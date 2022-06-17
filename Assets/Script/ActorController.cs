@@ -79,26 +79,37 @@ public class ActorController : MonoBehaviour
 
     public void OnJumpEnter()
     {
-        pi.inputEnable = false;
-        lockPlanar = true;
         thrustVec = new Vector3(0.0f, jumpVelocity, 0.0f);
     }
 
-    public void OnJumpExit()
-    {
-        pi.inputEnable = true;
-        lockPlanar = false;
-    }
+    //public void OnJumpExit()
+    //{
+    //    pi.inputEnable = true;
+    //    lockPlanar = false;
+    //}
 
     public void IsGround()
     {
         anim.SetBool("isGround", true);
-        print("I am the ground!");
+        print("I am on Ground!");
     }
 
     public void IsNotGround()
     {
         anim.SetBool("isGround", false);
-        print("So now I am flying!");
+        print("Now, I am flying!");
     }
+
+    public void OnGroundEnter()
+    {
+        pi.inputEnable = true;
+        lockPlanar = false;
+    }
+
+    public void OnGroundExit()
+    {
+        pi.inputEnable = false;
+        lockPlanar = true;
+    }
+
 }

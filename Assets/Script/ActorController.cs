@@ -115,7 +115,7 @@ public class ActorController : MonoBehaviour
             Destroy(debugTmp);
         }
         anim.SetBool("isGround", true);
-        print("I am on Ground!");
+        //print("I am on Ground!");
         playerLastPoint = this.transform.position;
     }
     /**
@@ -124,10 +124,10 @@ public class ActorController : MonoBehaviour
     public void IsNotGround()
     {
         anim.SetBool("isGround", false);
-        print("Now, I am flying!");
+        //print("Now, I am flying!");
         if(debugTmp == null)
         {
-            debugTmp = GameObject.Instantiate(deBugBall, playerLastPoint, Quaternion.identity);
+            debugTmp = GameObject.Instantiate(deBugBall, playerLastPoint+new Vector3(0,0.05f,0), Quaternion.identity);
         }
     }
 

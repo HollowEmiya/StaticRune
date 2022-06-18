@@ -41,11 +41,18 @@ public class PlayerInput : MonoBehaviour
 
     [Header("===== Others =====")]
     public bool inputEnable = true;
+    public GameObject cameraHandle;
+    public bool mouseIsVisible = false;
 
     private float targetDup;
     private float targetDright;
     private float velocityDup;
     private float velocityDright;
+
+    private void Awake()
+    {
+        Cursor.visible = mouseIsVisible;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -87,7 +94,9 @@ public class PlayerInput : MonoBehaviour
         float tempDup = tempDAxis.y;
 
         Dmag = Mathf.Sqrt(tempDright*tempDright + tempDup*tempDup);
-        Dvec = tempDright * transform.right + tempDup * transform.forward;
+        Vector3 movRight = Vector3.ProjectOnPlane(cameraHandle.transform.right, Vector3.up);
+        Vector3 movForward = Vector3.ProjectOnPlane(cameraHandle.transform.forward, Vector3.up);
+        Dvec = tempDright * movRight + tempDup * movForward;
         //Debug.Log("Dup: " + Dup);
 
         run = Input.GetKey(keyA);

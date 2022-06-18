@@ -17,6 +17,9 @@ public class PlayerInput : MonoBehaviour
     public string keyC;
     public string keyD;
 
+    public string keyViewRight;
+    public string keyViewUp;
+
     [Header("===== Output Siganl =====")]
     public float Dup;
     public float Dright;
@@ -25,6 +28,9 @@ public class PlayerInput : MonoBehaviour
      * <summary> move direction </summary>
      */
     public Vector3 Dvec;
+    public float viewDUp;
+    public float viewDRight;
+
 
     // 1.pressing signal
     public bool run;
@@ -92,6 +98,12 @@ public class PlayerInput : MonoBehaviour
         {
             
         }
+
+        /**
+         * mouse control view
+         */
+        viewDRight = Input.GetAxisRaw("Mouse X");
+        viewDUp = Input.GetAxisRaw("Mouse Y");
 
         /**
          * for GetKeyDown

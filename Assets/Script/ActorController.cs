@@ -22,6 +22,11 @@ public class ActorController : MonoBehaviour
 
     private bool lockPlanar = false;
 
+    [Header("Debug Setting")]
+    public GameObject deBugBall;
+    private Vector3 playerLastPoint;
+    private GameObject debugTmp;
+
     private void Awake()
     {
         pi = GetComponent<PlayerInput>();           // get by itself
@@ -100,24 +105,44 @@ public class ActorController : MonoBehaviour
     //    lockPlanar = false;
     //}
 
+    /**
+     * be called in OnGroundSensor.
+     */
     public void IsGround()
     {
+        if(debugTmp != null)
+        {
+            Destroy(debugTmp);
+        }
         anim.SetBool("isGround", true);
         print("I am on Ground!");
+        playerLastPoint = this.transform.position;
     }
-
+    /**
+     * be called in OnGroundSensor.
+     */
     public void IsNotGround()
     {
         anim.SetBool("isGround", false);
         print("Now, I am flying!");
+        if(debugTmp == null)
+        {
+            debugTmp = GameObject.Instantiate(deBugBall, playerLastPoint, Quaternion.identity);
+        }
     }
 
+    /**
+     * be called in animator
+     */
     public void OnGroundEnter()
     {
         pi.inputEnable = true;
         lockPlanar = false;
     }
 
+    /**
+     * be called in animator
+     */
     public void OnGroundExit()
     {
         pi.inputEnable = false;

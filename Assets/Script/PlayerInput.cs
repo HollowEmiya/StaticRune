@@ -36,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     public bool run;
     // 2. trigger once type siganl
     public bool isJump;
+    public bool isAttack;
     // private bool lastJump;           // for simulate Input.GetKeyDown()
     // 3. double trigger
 
@@ -101,11 +102,12 @@ public class PlayerInput : MonoBehaviour
 
         run = Input.GetKey(keyA);
 
-        bool tempJump = Input.GetKey(keyB);
         isJump = Input.GetKeyDown(keyB);
-        if (isJump)
+
+        isAttack = Input.GetKeyDown(keyC);
+        if(isAttack)
         {
-            
+            print("Attack!!!");
         }
 
         /**

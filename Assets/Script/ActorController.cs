@@ -64,6 +64,12 @@ public class ActorController : MonoBehaviour
         {
             anim.SetTrigger("jump");
         }
+
+        if(pi.isAttack)
+        {
+            anim.SetTrigger("attack");
+        }    
+
         // if move change the forward
         if(pi.Dvec.magnitude > 0.01f)
         {

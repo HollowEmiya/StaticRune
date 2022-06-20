@@ -17,7 +17,13 @@ public class ActorController : MonoBehaviour
     [SerializeField]            // 让变量可见，该变量必须被编译器支持
     private Animator anim;
     private Rigidbody rigid;
+    /**
+     * <summary>player planar velocity</summary>
+     */
     private Vector3 planarVec;      // move direction vector for fixedUpdate
+    /**
+     * <summary>player velocity which be added by power,like jump, attack(</summary>
+     */
     private Vector3 thrustVec;
 
     private bool lockPlanar = false;
@@ -157,12 +163,22 @@ public class ActorController : MonoBehaviour
 
     public void OnAttack1hAEnter()
     {
+        pi.inputEnable = false;
+        lockPlanar = true;
         // parameter index, parameter weight
         anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 1.0f);
     }
 
+    public void OnAttack1hAUpdate()
+    {
+        // when attack give a velocity to forward
+        thrustVec = model.transform.forward * anim.GetFloat("attack1hAVelocity");
+    }
+
     public void OnAttackIdleEnter()
     {
+        pi.inputEnable = true;
+        lockPlanar = false;
         anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 0);
     }
 }

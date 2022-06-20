@@ -350,7 +350,7 @@ MonoBehaviour:
   isAttack: 0
   inputEnable: 1
   cameraHandle: {fileID: 1710202358}
-  mouseIsVisible: 0
+  mouseIsVisible: 1
 --- !u!114 &333218106
 MonoBehaviour:
   m_ObjectHideFlags: 0

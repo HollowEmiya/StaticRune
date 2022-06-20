@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FSMOnEnter : StateMachineBehaviour
 {
+    [Header("When Enter call")]
     public string[] onEnterMessages;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

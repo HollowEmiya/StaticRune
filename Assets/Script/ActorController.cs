@@ -155,4 +155,14 @@ public class ActorController : MonoBehaviour
         lockPlanar = true;
     }
 
+    public void OnAttack1hAEnter()
+    {
+        // parameter index, parameter weight
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 1.0f);
+    }
+
+    public void OnAttackIdleEnter()
+    {
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 0);
+    }
 }

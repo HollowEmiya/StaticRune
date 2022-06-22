@@ -105,10 +105,7 @@ public class PlayerInput : MonoBehaviour
         isJump = Input.GetKeyDown(keyB);
 
         isAttack = Input.GetKeyDown(keyC);
-        if(isAttack)
-        {
-            print("Attack!!!");
-        }
+        
 
         /**
          * mouse control view

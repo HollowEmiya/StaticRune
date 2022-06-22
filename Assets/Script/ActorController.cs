@@ -14,6 +14,12 @@ public class ActorController : MonoBehaviour
     public float jumpVelocity = 5.0f;
     public float rollLimiteSpeed = 10.0f;
 
+    [Space(10)]
+    [Header("Friction Settings")]
+    public PhysicMaterial frictionOne;
+    public PhysicMaterial frictionZero;
+    private CapsuleCollider playerCap;
+
     [SerializeField]            // 让变量可见，该变量必须被编译器支持
     private Animator anim;
     private Rigidbody rigid;
@@ -25,8 +31,8 @@ public class ActorController : MonoBehaviour
      * <summary>player velocity which be added by power,like jump, attack(</summary>
      */
     private Vector3 thrustVec;
-
     private bool lockPlanar = false;
+    private bool attackAble = true;
 
     [Header("Debug Setting")]
     public GameObject deBugBall;
@@ -42,6 +48,8 @@ public class ActorController : MonoBehaviour
         //{
 
         //}
+
+        playerCap = GetComponent<CapsuleCollider>();
     }
 
     // Start is called before the first frame update
@@ -69,9 +77,10 @@ public class ActorController : MonoBehaviour
         if (pi.isJump)
         {
             anim.SetTrigger("jump");
+            attackAble = false;
         }
 
-        if(pi.isAttack)
+        if(pi.isAttack && CheckState("groundBlend") && attackAble)
         {
             anim.SetTrigger("attack");
         }    
@@ -89,6 +98,8 @@ public class ActorController : MonoBehaviour
                 planarVec = pi.Dmag * model.transform.forward * walkSpeed * (pi.run ? runMultiplier : 1.0f);
             }
         }
+
+        print(CheckState("groundBlend"));
     }
 
     private void FixedUpdate()              // Physics engine simulates 50 times pre second, it has a different speed fron update
@@ -100,6 +111,13 @@ public class ActorController : MonoBehaviour
     void playerMove()
     {
 
+    }
+
+    private bool CheckState(string stateName, string layerName = "Base Layer")
+    {
+        int layerIndex = anim.GetLayerIndex(layerName);
+        bool result = anim.GetCurrentAnimatorStateInfo(layerIndex).IsName(stateName);
+        return result;
     }
 
     /// <summary>
@@ -150,6 +168,8 @@ public class ActorController : MonoBehaviour
     {
         pi.inputEnable = true;
         lockPlanar = false;
+        attackAble = true;
+        playerCap.material = frictionOne;
     }
 
     /**
@@ -157,8 +177,7 @@ public class ActorController : MonoBehaviour
      */
     public void OnGroundExit()
     {
-        pi.inputEnable = false;
-        lockPlanar = true;
+        playerCap.material = frictionZero;
     }
 
     public void OnAttack1hAEnter()
@@ -171,8 +190,19 @@ public class ActorController : MonoBehaviour
 
     public void OnAttack1hAUpdate()
     {
-        // when attack give a velocity to forward
-        thrustVec = model.transform.forward * anim.GetFloat("attack1hAVelocity");
+        if(!anim.GetBool("isGround"))
+        {
+            // if in the sky, then attack down
+            planarVec = Vector3.zero;
+            thrustVec = -model.transform.up * 1.0f;
+        }
+        else
+        {
+            planarVec = Vector3.Slerp(planarVec, Vector3.zero, 0.1f);
+            // when attack give a velocity to forward
+            thrustVec = model.transform.forward * anim.GetFloat("attack1hAVelocity");
+
+        }
     }
 
     public void OnAttackIdleEnter()

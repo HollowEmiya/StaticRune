@@ -369,6 +369,8 @@ MonoBehaviour:
   runMultiplier: 2.5
   jumpVelocity: 5
   rollLimiteSpeed: 10
+  frictionOne: {fileID: 13400000, guid: 54afc5b102a8b064bb765f58b263d101, type: 2}
+  frictionZero: {fileID: 13400000, guid: cee3270af9a5bb94abf6ba1d60c58b3e, type: 2}
   anim: {fileID: 0}
   deBugBall: {fileID: 3235986111068774630, guid: 204a4c29fc14f7d47bdf5db70aeb691f, type: 3}
 --- !u!54 &333218107

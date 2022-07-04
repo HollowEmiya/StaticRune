@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
 
         cameraPos = transforms[1].gameObject;
 
-        print(cameraPos.name);
+        //print(cameraPos.name);
     }
 
     // Start is called before the first frame update

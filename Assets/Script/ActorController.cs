@@ -22,7 +22,10 @@ public class ActorController : MonoBehaviour
 
     [SerializeField]            // 让变量可见，该变量必须被编译器支持
     private Animator anim;
+    private int attackLayerIndex;
     private Rigidbody rigid;
+    [SerializeField]
+    private float avatarLerpTarget;
     /**
      * <summary>player planar velocity</summary>
      */
@@ -33,6 +36,8 @@ public class ActorController : MonoBehaviour
     private Vector3 thrustVec;
     private bool lockPlanar = false;
     private bool attackAble = true;
+    // for animator motion
+    private Vector3 deltaPos;
 
     [Header("Debug Setting")]
     public GameObject deBugBall;
@@ -50,6 +55,7 @@ public class ActorController : MonoBehaviour
         //}
 
         playerCap = GetComponent<CapsuleCollider>();
+        attackLayerIndex = anim.GetLayerIndex("Attack Layer");
     }
 
     // Start is called before the first frame update
@@ -80,6 +86,8 @@ public class ActorController : MonoBehaviour
             attackAble = false;
         }
 
+        // is player attack and onGround, attackAble
+        // it is player can attack when jumping or other something.
         if(pi.isAttack && CheckState("groundBlend") && attackAble)
         {
             anim.SetTrigger("attack");
@@ -98,13 +106,13 @@ public class ActorController : MonoBehaviour
                 planarVec = pi.Dmag * model.transform.forward * walkSpeed * (pi.run ? runMultiplier : 1.0f);
             }
         }
-
-        print(CheckState("groundBlend"));
     }
 
     private void FixedUpdate()              // Physics engine simulates 50 times pre second, it has a different speed fron update
     {
         // rigid.position += planarVec * Time.fixedDeltaTime;    // different update, must fix deltaTime
+        rigid.position += deltaPos;
+        deltaPos = Vector3.zero;
         rigid.velocity = new Vector3(planarVec.x, rigid.velocity.y, planarVec.z) + thrustVec;
         thrustVec = Vector3.zero;
     }
@@ -145,7 +153,6 @@ public class ActorController : MonoBehaviour
             Destroy(debugTmp);
         }
         anim.SetBool("isGround", true);
-        //print("I am on Ground!");
         playerLastPoint = this.transform.position;
     }
     /**
@@ -154,7 +161,6 @@ public class ActorController : MonoBehaviour
     public void IsNotGround()
     {
         anim.SetBool("isGround", false);
-        //print("Now, I am flying!");
         if(debugTmp == null)
         {
             debugTmp = GameObject.Instantiate(deBugBall, playerLastPoint+new Vector3(0,0.05f,0), Quaternion.identity);
@@ -180,28 +186,37 @@ public class ActorController : MonoBehaviour
         playerCap.material = frictionZero;
     }
 
+    // when enter attack1ha
     public void OnAttack1hAEnter()
     {
         pi.inputEnable = false;
         lockPlanar = true;
         // parameter index, parameter weight
-        anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 1.0f);
+        avatarLerpTarget = 1.0f;
+        //anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 1.0f);
     }
 
+    // when on attack1hA
     public void OnAttack1hAUpdate()
     {
+        // NOT ON THE GROUND
         if(!anim.GetBool("isGround"))
         {
             // if in the sky, then attack down
             planarVec = Vector3.zero;
             thrustVec = -model.transform.up * 1.0f;
+            
         }
+        // ON THE GROUND
         else
         {
             planarVec = Vector3.Slerp(planarVec, Vector3.zero, 0.1f);
             // when attack give a velocity to forward
             thrustVec = model.transform.forward * anim.GetFloat("attack1hAVelocity");
-
+            
+            float currentWeight = anim.GetLayerWeight(anim.GetLayerIndex("Attack Layer"));
+            currentWeight = Mathf.Lerp(currentWeight, avatarLerpTarget, 0.05f);
+            anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), currentWeight);
         }
     }
 
@@ -209,6 +224,26 @@ public class ActorController : MonoBehaviour
     {
         pi.inputEnable = true;
         lockPlanar = false;
-        anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 0);
+        avatarLerpTarget = 0;
+        
+        //float currentWeight = anim.GetLayerWeight(attackLayerIndex);
+        //currentWeight = Mathf.Lerp(currentWeight, avatarLerpTarget, 0.5f);
+        //anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), currentWeight);
+    }
+
+    public void OnAttackIdleUpdate()
+    {
+        float currentWeight = anim.GetLayerWeight(anim.GetLayerIndex("Attack Layer"));
+        currentWeight = Mathf.Lerp(currentWeight, avatarLerpTarget, 0.05f);
+        anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), currentWeight);
+    }
+
+    public void OnUpdateRootMotion(object rmDeltPos)
+    {
+        // print("OnRootMotion!:" + deltPos);
+        if (CheckState("attack1hC", "Attack Layer"))
+        {
+            deltaPos += (Vector3)rmDeltPos;
+        }
     }
 }

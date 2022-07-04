@@ -24,10 +24,10 @@ public class JoyControl : MonoBehaviour
         }
         for (int i = 0; i < 8; i++)
         {
-            string joyBut = "JoyBut" + i.ToString();
-            if(Input.GetButtonDown(joyBut))
+            string joyBtn = "JoyBtn" + i.ToString();
+            if(Input.GetButtonDown(joyBtn))
             {
-                print(joyBut + "!!!!");
+                print(joyBtn + "!!!!");
             }
         }
     }

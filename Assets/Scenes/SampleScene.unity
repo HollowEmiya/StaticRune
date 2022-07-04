@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 333218104}
   - component: {fileID: 333218102}
   - component: {fileID: 333218101}
+  - component: {fileID: 333218108}
   - component: {fileID: 333218105}
   - component: {fileID: 333218106}
   - component: {fileID: 333218107}
@@ -312,7 +313,6 @@ Transform:
   - {fileID: 1266149315}
   - {fileID: 439370699}
   - {fileID: 856082796}
-  - {fileID: 963194228}
   - {fileID: 1710202359}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -329,16 +329,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa83bf7e5d210c4895d1a9ad062b41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyUp: w
-  keyDown: s
-  keyLeft: a
-  keyRight: d
-  keyA: left shift
-  keyB: space
-  keyC: mouse 0
-  keyD: 
-  keyViewRight: 
-  keyViewUp: 
   Dup: 0
   Dright: 0
   Dmag: 0
@@ -351,6 +341,16 @@ MonoBehaviour:
   inputEnable: 1
   cameraHandle: {fileID: 1710202358}
   mouseIsVisible: 1
+  keyUp: w
+  keyDown: s
+  keyLeft: a
+  keyRight: d
+  keyA: left shift
+  keyB: space
+  keyC: mouse 0
+  keyD: 
+  keyViewRight: 
+  keyViewUp: 
 --- !u!114 &333218106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +390,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &333218108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333218100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3edc782de2cfc547aeed26bcd6619df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Dup: 0
+  Dright: 0
+  Dmag: 0
+  Dvec: {x: 0, y: 0, z: 0}
+  viewDUp: 0
+  viewDRight: 0
+  run: 0
+  isJump: 0
+  isAttack: 0
+  inputEnable: 1
+  cameraHandle: {fileID: 0}
+  mouseIsVisible: 0
+  axisX: AxisX
+  axisY: AxisY
+  axisViewRight: JoyAxis4
+  axisViewUp: JoyAxis5
+  btn0: JoyBtn0
+  btn1: JoyBtn1
+  btn3: JoyBtn3
 --- !u!1001 &439370698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -738,12 +769,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.17364816, y: -0, z: -0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 2.562, z: -2.38}
+  m_LocalPosition: {x: 0, y: 2.562, z: -3.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 333218104}
-  m_RootOrder: 3
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!1 &1095176691 stripped
 GameObject:
@@ -876,6 +907,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3a14b86f1fa992f4eb84fc42c30b649a, type: 2}
+    - target: {fileID: 9500000, guid: 2f9d958fbcd96e44ca35a77a15e3187a, type: 3}
+      propertyPath: m_UpdateMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 2f9d958fbcd96e44ca35a77a15e3187a, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
@@ -1051,7 +1086,7 @@ Transform:
   m_Children:
   - {fileID: 1135069521}
   m_Father: {fileID: 333218104}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1710202360
 MonoBehaviour:
@@ -1065,7 +1100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0127dd63d24a4d84786abea88751ae16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pi: {fileID: 333218105}
+  pi: {fileID: 0}
   minVertical: -80
   maxVertical: 90
   horizontalSpeed: 5

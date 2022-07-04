@@ -8,7 +8,7 @@ public class ActorController : MonoBehaviour
      * <summary> The model of Actor. </summary>
      */
     public GameObject model;
-    public PlayerInput pi;
+    public IUserInput pi;
     public float walkSpeed = 1.35f;
     public float runMultiplier = 2.7f;
     public float jumpVelocity = 5.0f;
@@ -46,7 +46,16 @@ public class ActorController : MonoBehaviour
 
     private void Awake()
     {
-        pi = GetComponent<PlayerInput>();           // get by itself
+        IUserInput[] userInputs;
+        userInputs = GetComponents<IUserInput>();
+        foreach(var input in userInputs)
+        {
+            if(input.enabled == true)
+            {
+                pi = input;
+                break;
+            }
+        }
         anim = model.GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         //if(rigid == null)
@@ -243,7 +252,8 @@ public class ActorController : MonoBehaviour
         // print("OnRootMotion!:" + deltPos);
         if (CheckState("attack1hC", "Attack Layer"))
         {
-            deltaPos += (Vector3)rmDeltPos;
+            print("Attack3 Motion!");
+            deltaPos = (deltaPos + (Vector3)rmDeltPos) * 0.5f;
         }
     }
 }

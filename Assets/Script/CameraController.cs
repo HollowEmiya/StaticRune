@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    public PlayerInput pi;
+    private IUserInput pi;
     public float minVertical = -80;
     public float maxVertical = 90;
 
@@ -26,6 +26,12 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
+        
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         //cameraHandle = transform.parent.gameObject;
         transform.localEulerAngles = Vector3.zero;
         //playerHandle = cameraHandle.transform.parent.gameObject;
@@ -33,14 +39,8 @@ public class CameraController : MonoBehaviour
         Transform[] transforms = GetComponentsInChildren<Transform>();
 
         cameraPos = transforms[1].gameObject;
-
+        pi = transform.parent.GetComponent<ActorController>().pi;
         //print(cameraPos.name);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -66,9 +66,7 @@ public class CameraController : MonoBehaviour
 
         mainCamera.transform.position = isCameraCatch ? Vector3.SmoothDamp(mainCamera.transform.position, cameraPos.transform.position, ref cameraDampVelocity, cameraCatchTime) : cameraPos.transform.position;
         //mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraPos.transform.position, cameraMoveSpeed);
-        mainCamera.transform.rotation = cameraPos.transform.rotation;
-        /**
-         * over
-         */
+        //mainCamera.transform.rotation = cameraPos.transform.rotation;
+        mainCamera.transform.LookAt(transform);
     }
 }

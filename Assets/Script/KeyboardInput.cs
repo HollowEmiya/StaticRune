@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class KeyboardInput : IUserInput
 {
     // sometime we need change input-key but input-manager can't
     // we need the input defined by ourself
@@ -20,45 +20,46 @@ public class PlayerInput : MonoBehaviour
     public string keyViewRight;
     public string keyViewUp;
 
-    [Header("===== Output Siganl =====")]
-    public float Dup;
-    public float Dright;
-    public float Dmag;
-    /**
-     * <summary> move direction </summary>
-     */
-    public Vector3 Dvec;
-    public float viewDUp;
-    public float viewDRight;
+    //[Header("===== Output Siganl =====")]
+    //public float Dup;
+    //public float Dright;
+    //public float Dmag;
+    ///**
+    // * <summary> move direction </summary>
+    // */
+    //public Vector3 Dvec;
+    //public float viewDUp;
+    //public float viewDRight;
 
 
-    // 1.pressing signal
-    public bool run;
-    // 2. trigger once type siganl
-    public bool isJump;
-    public bool isAttack;
-    // private bool lastJump;           // for simulate Input.GetKeyDown()
-    // 3. double trigger
+    //// 1.pressing signal
+    //public bool run;
+    //// 2. trigger once type siganl
+    //public bool isJump;
+    //public bool isAttack;
+    //// private bool lastJump;           // for simulate Input.GetKeyDown()
+    //// 3. double trigger
 
-    [Header("===== Others =====")]
-    public bool inputEnable = true;
-    public GameObject cameraHandle;
-    public bool mouseIsVisible = false;
+    //[Header("===== Others =====")]
+    //public bool inputEnable = true;
+    //public GameObject cameraHandle;
+    //public bool mouseIsVisible = false;
 
-    private float targetDup;
-    private float targetDright;
-    private float velocityDup;
-    private float velocityDright;
+    //private float targetDup;
+    //private float targetDright;
+    //private float velocityDup;
+    //private float velocityDright;
 
     private void Awake()
     {
         Cursor.visible = mouseIsVisible;
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        cameraHandle = GetComponentInChildren<CameraController>().gameObject;
     }
 
     // Update is called once per frame
@@ -129,12 +130,12 @@ public class PlayerInput : MonoBehaviour
 
     }
 
-    private Vector2 SquareToCircle(Vector2 input)
-    {
-        Vector2 output = Vector2.zero;
-        output.x = input.x * Mathf.Sqrt(1 - (input.y * input.y) / 2.0f);
-        output.y = input.y * Mathf.Sqrt(1 - (input.x * input.x) / 2.0f);
+    //private Vector2 SquareToCircle(Vector2 input)
+    //{
+    //    Vector2 output = Vector2.zero;
+    //    output.x = input.x * Mathf.Sqrt(1 - (input.y * input.y) / 2.0f);
+    //    output.y = input.y * Mathf.Sqrt(1 - (input.x * input.x) / 2.0f);
 
-        return output;
-    }
+    //    return output;
+    //}
 }

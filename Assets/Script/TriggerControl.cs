@@ -15,4 +15,14 @@ public class TriggerControl : MonoBehaviour
     {
         playerAnimator.ResetTrigger(triggerName);
     }
+
+    public void ActiveCol()
+    {
+        playerAnimator.SetBool("collider",true);
+    }
+
+    public void DeActiveCol()
+    {
+        playerAnimator.SetBool("collider",false);
+    }
 }

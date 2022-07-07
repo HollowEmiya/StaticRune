@@ -200,6 +200,9 @@ public class ActorController : MonoBehaviour
     {
         pi.inputEnable = false;
         lockPlanar = true;
+
+        // anim.SetBool("collider", true);
+
         // parameter index, parameter weight
         avatarLerpTarget = 1.0f;
         //anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), 1.0f);
@@ -229,12 +232,36 @@ public class ActorController : MonoBehaviour
         }
     }
 
+    void OnAttack1hAExit()
+    {
+        anim.SetBool("collider", false);
+    }
+
+    public void OnAttack1hBEnter()
+    {
+        anim.SetBool("collider", true);
+    }
+    public void OnAttack1hBExit()
+    {
+        anim.SetBool("collider", false);
+    }
+
+    public void OnAttack1hCEnter()
+    {
+        anim.SetBool("collider", true);
+    }
+    public void OnAttack1hCExit()
+    {
+        anim.SetBool("collider", false);
+    }
+
+
     public void OnAttackIdleEnter()
     {
         pi.inputEnable = true;
         lockPlanar = false;
         avatarLerpTarget = 0;
-        
+
         //float currentWeight = anim.GetLayerWeight(attackLayerIndex);
         //currentWeight = Mathf.Lerp(currentWeight, avatarLerpTarget, 0.5f);
         //anim.SetLayerWeight(anim.GetLayerIndex("Attack Layer"), currentWeight);
@@ -252,7 +279,7 @@ public class ActorController : MonoBehaviour
         // print("OnRootMotion!:" + deltPos);
         if (CheckState("attack1hC", "Attack Layer"))
         {
-            print("Attack3 Motion!");
+            // print("Attack3 Motion!");
             deltaPos = (deltaPos + (Vector3)rmDeltPos) * 0.5f;
         }
     }

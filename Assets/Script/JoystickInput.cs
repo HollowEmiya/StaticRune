@@ -12,6 +12,7 @@ public class JoystickInput : IUserInput
     public string btn0 = "JoyBtn0";
     public string btn1 = "JoyBtn1";
     public string btn3 = "JoyBtn3";
+    public string btn4 = "JoyBtn4";
 
     //[Header("===== Output Siganl =====")]
     //public float Dup;
@@ -82,6 +83,11 @@ public class JoystickInput : IUserInput
         run = Input.GetButton(btn0);
         isJump = Input.GetButtonDown(btn3);
         isAttack = Input.GetButtonDown(btn1);
+
+        if(Input.GetButtonDown(btn4))
+        {
+            staticRune = !staticRune;
+        }
     }
 
     //private Vector2 SquareToCircle(Vector2 input)

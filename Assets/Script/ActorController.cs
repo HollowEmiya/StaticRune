@@ -38,6 +38,9 @@ public class ActorController : MonoBehaviour
     private bool attackAble = true;
     // for animator motion
     private Vector3 deltaPos;
+    
+    [SerializeField]
+    private CameraController cameraContro;
 
     [Header("Debug Setting")]
     public GameObject deBugBall;
@@ -62,6 +65,8 @@ public class ActorController : MonoBehaviour
         //{
 
         //}
+
+        cameraContro = GetComponentInChildren<CameraController>();
 
         playerCap = GetComponent<CapsuleCollider>();
         attackLayerIndex = anim.GetLayerIndex("Attack Layer");
@@ -114,6 +119,16 @@ public class ActorController : MonoBehaviour
             {
                 planarVec = pi.Dmag * model.transform.forward * walkSpeed * (pi.run ? runMultiplier : 1.0f);
             }
+        }
+
+        // if enter static rune func
+        if(pi.staticRune)
+        {
+            cameraContro.StaticRuneCamera();
+        }
+        else
+        {
+            cameraContro.ResetRuneCamera();
         }
     }
 

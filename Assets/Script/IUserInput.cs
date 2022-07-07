@@ -17,6 +17,7 @@ public abstract class IUserInput : MonoBehaviour
 
     // 1.pressing signal
     public bool run;
+    public bool staticRune;
     // 2. trigger once type siganl
     public bool isJump;
     public bool isAttack;

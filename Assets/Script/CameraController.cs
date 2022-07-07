@@ -24,6 +24,14 @@ public class CameraController : MonoBehaviour
     private Camera mainCamera;
     private GameObject cameraPos;
 
+    [Header("Statics Rune Setting")]
+    [SerializeField]
+    private GameObject staticedObject;
+    public Material staticMat;
+    [SerializeField]
+    private MeshRenderer[] targetMeshs;
+    private List<Material> preMats = new List<Material>();
+
     private void Awake()
     {
         
@@ -68,5 +76,55 @@ public class CameraController : MonoBehaviour
         //mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraPos.transform.position, cameraMoveSpeed);
         //mainCamera.transform.rotation = cameraPos.transform.rotation;
         mainCamera.transform.LookAt(transform);
+    }
+
+    public void StaticRuneCamera()
+    {
+        mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView,50,0.5f);
+        RaycastHit hit;
+        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit,100,LayerMask.GetMask("ObjectSE")))
+        {
+            if(staticedObject == null)
+            {
+                staticedObject = hit.collider.gameObject;
+                if(staticedObject != null)
+                {
+                    //print(hit.collider.transform.parent);
+                    targetMeshs = staticedObject.GetComponentsInChildren<MeshRenderer>();
+                    for(int i = 0; i < targetMeshs.Length; i++)
+                    {
+                        preMats.Add(targetMeshs[i].material);
+                        targetMeshs[i].material = staticMat;
+                    }
+                }
+            }
+            
+        }
+        else
+        {
+            if(staticedObject != null)
+            {
+                for(int i = 0; i < targetMeshs.Length; i++)
+                {
+                    targetMeshs[i].material = preMats[i];
+                }
+            }
+            staticedObject = null;
+            preMats.Clear();
+        }
+    }
+
+    public void ResetRuneCamera()
+    {
+        mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 60, 0.5f);
+        if(preMats.Count > 0 && staticedObject != null)
+        {
+            for (int i = 0; i < targetMeshs.Length; i++)
+            {
+                targetMeshs[i].material = preMats[i];
+            }
+            staticedObject = null;
+            preMats.Clear();
+        }
     }
 }

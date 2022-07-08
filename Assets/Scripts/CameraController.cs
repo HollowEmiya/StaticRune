@@ -31,6 +31,9 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private MeshRenderer[] targetMeshs;
     private List<Material> preMats = new List<Material>();
+    private Material preStasisMat;
+
+    private GameObject stasisedObject;
 
     private void Awake()
     {
@@ -90,24 +93,54 @@ public class CameraController : MonoBehaviour
                 if(staticedObject != null)
                 {
                     //print(hit.collider.transform.parent);
-                    targetMeshs = staticedObject.GetComponentsInChildren<MeshRenderer>();
-                    for(int i = 0; i < targetMeshs.Length; i++)
+                    StasisObject tmp = staticedObject.GetComponent<StasisObject>();
+                    //tmp.beStasisWatch = true;
+                    if(tmp != null)
                     {
-                        preMats.Add(targetMeshs[i].material);
-                        targetMeshs[i].material = staticMat;
+                        preStasisMat = tmp.stasisMat;
+                        tmp.stasisMat = staticMat;
+                    }
+                    
+                    //targetMeshs = staticedObject.GetComponentsInChildren<MeshRenderer>();
+                    //for(int i = 0; i < targetMeshs.Length; i++)
+                    //{
+                    //    preMats.Add(targetMeshs[i].material);
+                    //    targetMeshs[i].material = staticMat;
+                    //}
+                }
+            }
+            if(staticedObject!=null)
+            {
+                if(pi.lockRune && (pi.playerStasisEnable||staticedObject == stasisedObject))
+                {
+                    StasisObject tmp = staticedObject.GetComponent<StasisObject>();
+                    if(tmp!=null)
+                    {
+                        tmp.ChangeStasisState();
+                        if (tmp.beStasised)
+                        {
+                            stasisedObject = staticedObject; 
+                        }
                     }
                 }
             }
-            
         }
         else
         {
             if(staticedObject != null)
             {
-                for(int i = 0; i < targetMeshs.Length; i++)
+                StasisObject tmp = staticedObject.GetComponent<StasisObject>();
+                //tmp.beStasisWatch = false;
+                if(tmp!=null)
                 {
-                    targetMeshs[i].material = preMats[i];
+                    tmp.stasisMat = preStasisMat;
                 }
+                    
+                //for(int i = 0; i < targetMeshs.Length; i++)
+                //{
+                //    targetMeshs[i].material = preMats[i];
+                //}
+
             }
             staticedObject = null;
             preMats.Clear();

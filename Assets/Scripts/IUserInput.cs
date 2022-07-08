@@ -18,6 +18,8 @@ public abstract class IUserInput : MonoBehaviour
     // 1.pressing signal
     public bool run;
     public bool staticRune;
+    public bool lockRune;
+    public bool playerStasisEnable;
     // 2. trigger once type siganl
     public bool isJump;
     public bool isAttack;
@@ -42,5 +44,14 @@ public abstract class IUserInput : MonoBehaviour
         output.y = input.y * Mathf.Sqrt(1 - (input.x * input.x) / 2.0f);
 
         return output;
+    }
+
+    public bool CheckStasis()
+    {
+        if(staticRune)
+        {
+            return true;
+        }
+        return false;
     }
 }

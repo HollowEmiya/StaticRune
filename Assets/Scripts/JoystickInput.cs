@@ -13,6 +13,8 @@ public class JoystickInput : IUserInput
     public string btn1 = "JoyBtn1";
     public string btn3 = "JoyBtn3";
     public string btn4 = "JoyBtn4";
+    public string btn5 = "JoyBtn5";
+
 
     //[Header("===== Output Siganl =====")]
     //public float Dup;
@@ -44,6 +46,12 @@ public class JoystickInput : IUserInput
     //private float velocityDup;
     //private float velocityDright;
     //Start is called before the first frame update
+
+    private void Awake()
+    {
+        playerStasisEnable = true;
+    }
+
     void Start()
     {
         cameraHandle = GetComponentInChildren<CameraController>().gameObject;
@@ -88,6 +96,7 @@ public class JoystickInput : IUserInput
         {
             staticRune = !staticRune;
         }
+        lockRune = Input.GetButtonDown(btn5) && staticRune;
     }
 
     //private Vector2 SquareToCircle(Vector2 input)

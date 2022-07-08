@@ -40,15 +40,29 @@ public class SwordCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         RaycastHit hit;
-
+        StasisObject rig;
         if (Physics.Raycast(transform.position + (transform.forward * 1.0f), -transform.forward, out hit, 8, collLayerMask))
         {
             if(debugBallPtr != null)
             {
                 Destroy(debugBallPtr);
             }
-            print(hit.point);
+            // print(hit.point);
             debugBallPtr = Instantiate(debugBall,hit.point,Quaternion.identity);
+            rig = other.gameObject.GetComponent<StasisObject>();
+            if(rig != null)
+            {
+                
+                if (rig.beStasised)
+                {
+                    //print(forceDir);
+                    rig.AddToForce(hit.point,attackForce);
+                }
+                else
+                {
+                    rig.rb.AddForce(rig.computeDir(hit.point)*attackForce);
+                }
+            }
         }        
         //print(LayerMask.LayerToName( other.gameObject.layer));
     }

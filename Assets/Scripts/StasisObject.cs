@@ -37,11 +37,20 @@ public class StasisObject : MonoBehaviour
     public Vector3 force;
     public float momentumStrength = 100.0f;
 
+    [Header("Other")]
+    [SerializeField]
+    private Transform arrow;
+
+    [Header("Particles")]
+    public Transform startParticleGroup;
+    public Transform endParticleGroup;
+
     private void Awake()
     {
         pi = GameObject.Find("PlayerHandle").GetComponent<IUserInput>();
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
+        arrow = transform.GetChild(0);
     }
 
     // Start is called before the first frame update
@@ -97,6 +106,7 @@ public class StasisObject : MonoBehaviour
         {
             pi.playerStasisEnable = false;
             restLockTime = lockEnableTime;
+            // arrow.gameObject.SetActive(true);
         }
         else if(!beStasised)
         {
@@ -104,12 +114,20 @@ public class StasisObject : MonoBehaviour
             restLockTime = 0.0f;
             rb.AddForce(force);
             force = Vector3.zero;
+            arrow.gameObject.SetActive(false);
         }
     }
 
     public void AddToForce(Vector3 hitPos, float forUp)
     {
-        force = (transform.position - hitPos) * (force.magnitude + momentumStrength * forUp);
+        Vector3 dir = transform.position - hitPos;
+        force = dir * (force.magnitude + momentumStrength * forUp);
+        arrow.gameObject.SetActive(true);
+        float arrowScale = Mathf.Min(arrow.localScale.z + 0.3f, 1.8f)*10;
+        Vector3 tmp = new Vector3(arrow.localScale.x,arrow.localScale.y,arrowScale);
+        arrow.localScale = tmp;
+
+        arrow.rotation = Quaternion.LookRotation(dir);
     }
 
     public Vector3 computeDir(Vector3 hitPos)

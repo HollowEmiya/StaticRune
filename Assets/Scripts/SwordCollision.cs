@@ -57,10 +57,12 @@ public class SwordCollision : MonoBehaviour
                 {
                     //print(forceDir);
                     rig.AddToForce(hit.point,attackForce);
+                    Instantiate(stasisHitParticle,hit.point,Quaternion.identity);
                 }
                 else
                 {
                     rig.rb.AddForce(rig.computeDir(hit.point)*attackForce);
+                    Instantiate(hitParticle,hit.point,Quaternion.identity);
                 }
             }
         }        

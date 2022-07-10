@@ -54,7 +54,7 @@ public class JoystickInput : IUserInput
 
     void Start()
     {
-        cameraHandle = GetComponentInChildren<CameraController>().gameObject;
+        cameraHandle = GetComponentInChildren<StasisCameraController>().gameObject;
     }
 
     // Update is called once per frame

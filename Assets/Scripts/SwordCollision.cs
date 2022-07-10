@@ -40,7 +40,7 @@ public class SwordCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         RaycastHit hit;
-        StasisObject rig;
+        StasisObject1Mat rig;
         if (Physics.Raycast(transform.position + (transform.forward * 1.0f), -transform.forward, out hit, 8, collLayerMask))
         {
             if(debugBallPtr != null)
@@ -49,7 +49,7 @@ public class SwordCollision : MonoBehaviour
             }
             // print(hit.point);
             debugBallPtr = Instantiate(debugBall,hit.point,Quaternion.identity);
-            rig = other.gameObject.GetComponent<StasisObject>();
+            rig = other.gameObject.GetComponent<StasisObject1Mat>();
             if(rig != null)
             {
                 

@@ -40,7 +40,7 @@ public class ActorController : MonoBehaviour
     private Vector3 deltaPos;
     
     [SerializeField]
-    private CameraController cameraContro;
+    private StasisCameraController cameraContro;
 
     [Header("Debug Setting")]
     public GameObject deBugBall;
@@ -66,7 +66,7 @@ public class ActorController : MonoBehaviour
 
         //}
 
-        cameraContro = GetComponentInChildren<CameraController>();
+        cameraContro = GetComponentInChildren<StasisCameraController>();
 
         playerCap = GetComponent<CapsuleCollider>();
         attackLayerIndex = anim.GetLayerIndex("Attack Layer");

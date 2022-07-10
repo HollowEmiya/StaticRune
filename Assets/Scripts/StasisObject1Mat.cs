@@ -48,6 +48,10 @@ public class StasisObject1Mat : MonoBehaviour
     [Header("Particles")]
     public Transform startParticleGroup;
     public Transform endParticleGroup;
+    public Color particleColor;
+
+    private TrailRenderer trail;
+    public float trailTime = 0.0f;
 
     private void Awake()
     {
@@ -57,6 +61,9 @@ public class StasisObject1Mat : MonoBehaviour
         arrow = transform.GetChild(0);
         objRenderer = GetComponent<Renderer>();
         // meshMat = meshRenderer.material;
+
+        trail = GetComponent<TrailRenderer>();
+        particleColor = normalColor;
     }
 
     // Start is called before the first frame update
@@ -87,12 +94,21 @@ public class StasisObject1Mat : MonoBehaviour
         {
             objectBeStasisWatch();
         }
+        else if(!pi.CheckStasis() && !beStasised)
+        {
+            objRenderer.material.SetFloat("_Stasis_Amount", 0.0f);
+        }
         //else if (pi.CheckStasis() && beStasised)
         //{
         //    objRenderer.material.SetColor("_Emission_Color", normalColor);
         //    objRenderer.material.SetFloat("_Stasis_Amount", 0.5f);
         //}
-        
+
+        trailTime -= Time.deltaTime;
+        if(trailTime < 0.1f)
+        {
+            trail.emitting = false;
+        }
     }
 
 
@@ -103,12 +119,19 @@ public class StasisObject1Mat : MonoBehaviour
         rb.isKinematic = beStasised;
         if (beStasised)
         {
-            pi.playerStasisEnable = false;
+            //pi.playerStasisEnable = false;
             restLockTime = lockEnableTime;
             // arrow.gameObject.SetActive(true);
             objRenderer.material.SetFloat("_Stasis_Amount", 0.5f);
             objRenderer.material.SetFloat("_Noise_Amount", 1.0f);
             objRenderer.material.SetColor("_Emission_Color",normalColor);
+
+            //startParticleGroup.LookAt(FindObjectOfType<ActorController>().transform);
+            ParticleSystem[] particles = startParticleGroup.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                particle.Play();
+            }
         }
         else if(!beStasised)
         {
@@ -117,13 +140,29 @@ public class StasisObject1Mat : MonoBehaviour
             rb.AddForce(force);
             force = Vector3.zero;
             arrow.gameObject.SetActive(false);
-            if(!pi.CheckStasis())
+
+            ParticleSystem[] particles = endParticleGroup.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                var pmain = particle.main;
+                pmain.startColor = particleColor;
+                particle.Play();
+            }
+
+            trail.startColor = particleColor;
+            trail.endColor = particleColor;
+            trail.emitting = true;
+            //trail.enabled = true;
+            trailTime = 2.0f;
+
+            if (!pi.CheckStasis())
             {
                 objRenderer.material.SetFloat("_Stasis_Amount", 0.0f);
 
                 objRenderer.material.SetColor("_Emission_Color", normalColor);
             }
             
+
         }
     }
 
@@ -150,6 +189,7 @@ public class StasisObject1Mat : MonoBehaviour
         Color c = objRenderer.material.GetColor("_Emission_Color");
         c = Color.Lerp(c, finalColor, 0.3f);
         objRenderer.material.SetColor("_Emission_Color", c);
+        particleColor = c;
     }
 
     public Vector3 computeDir(Vector3 hitPos)
@@ -160,6 +200,6 @@ public class StasisObject1Mat : MonoBehaviour
     public void objectBeStasisWatch()
     {
         objRenderer.material.SetColor("_Emission_Color", stasisEnableColor);
-        objRenderer.material.SetFloat("Stasis_Amount", 0.5f);
+        objRenderer.material.SetFloat("_Stasis_Amount", 0.5f);
     }
 }

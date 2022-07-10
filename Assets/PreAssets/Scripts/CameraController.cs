@@ -111,14 +111,17 @@ public class CameraController : MonoBehaviour
             }
             if(staticedObject!=null)
             {
+                // if watched a object and the object is we locked one
                 if(pi.lockRune && (pi.playerStasisEnable||staticedObject == stasisedObject))
                 {
                     StasisObject tmp = staticedObject.GetComponent<StasisObject>();
                     if(tmp!=null)
                     {
+                        // change the object we locked
                         tmp.ChangeStasisState();
                         if (tmp.beStasised)
                         {
+                            // if we locked the object, it will be the only one
                             stasisedObject = staticedObject; 
                         }
                     }

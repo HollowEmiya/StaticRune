@@ -43,12 +43,12 @@ public class SwordCollision : MonoBehaviour
         StasisObject1Mat rig;
         if (Physics.Raycast(transform.position + (transform.forward * 1.0f), -transform.forward, out hit, 8, collLayerMask))
         {
-            if(debugBallPtr != null)
-            {
-                Destroy(debugBallPtr);
-            }
+            //if(debugBallPtr != null)
+            //{
+            //    Destroy();
+            //}debugBallPtr
             // print(hit.point);
-            debugBallPtr = Instantiate(debugBall,hit.point,Quaternion.identity);
+            //debugBallPtr = Instantiate(debugBall,hit.point,Quaternion.identity);
             rig = other.gameObject.GetComponent<StasisObject1Mat>();
             if(rig != null)
             {

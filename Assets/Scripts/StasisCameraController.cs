@@ -26,9 +26,10 @@ public class StasisCameraController : MonoBehaviour
 
     [Header("Statics Rune Setting")]
     [SerializeField]
-    private GameObject staticedObject;
-    
+    private GameObject crossObject;
+    [SerializeField]
     private GameObject stasisedObject;
+    public StasisUiController uiController;
 
     private void Awake()
     {
@@ -78,56 +79,63 @@ public class StasisCameraController : MonoBehaviour
 
     public void StaticRuneCamera()
     {
+        uiController.EnterStasis();
         mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView,50,0.5f);
         RaycastHit hit;
         if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit,100,LayerMask.GetMask("ObjectSE")))
         {
-            if(staticedObject == null)
+            uiController.FindTarget();
+            uiController.LockedTarget();
+            GameObject currObj = hit.collider.gameObject;
+            StasisObject1Mat crossObjPtr;
+            if (crossObject == null)
             {
-                staticedObject = hit.collider.gameObject;
-                if(staticedObject != null)
+                // Get watched object
+                crossObject = currObj;
+                if(crossObject != null)
                 {
                     //print(hit.collider.transform.parent);
-                    StasisObject1Mat tmp = staticedObject.GetComponent<StasisObject1Mat>();
-
-                    //tmp.objectBeStasisWatch();
-                        
-                    //targetMeshs = staticedObject.GetComponentsInChildren<MeshRenderer>();
-                    //for(int i = 0; i < targetMeshs.Length; i++)
-                    //{
-                    //    preMats.Add(targetMeshs[i].material);
-                    //    targetMeshs[i].material = staticMat;
-                    //}
+                    crossObjPtr = crossObject.gameObject.GetComponent<StasisObject1Mat>();
+                    crossObjPtr.beStasisWatch = true;
                 }
             }
-            if(staticedObject!=null)
+            if(crossObject!=null)
             {
-                StasisObject1Mat tmp = staticedObject.GetComponent<StasisObject1Mat>();
-
-                if (pi.playerStasisEnable || staticedObject == stasisedObject)
+                crossObjPtr = crossObject.gameObject.GetComponent<StasisObject1Mat>();
+                // if change watch object, update crossObj
+                if (currObj != crossObject)
                 {
-                    tmp.beStasisWatch = true;
+                    crossObjPtr.beStasisWatch = false;
+                    crossObject = currObj;
+                    crossObjPtr = crossObject.GetComponent<StasisObject1Mat>();
+                    crossObjPtr.beStasisWatch= true;
                 }
-                if(pi.lockRune && (pi.playerStasisEnable||staticedObject == stasisedObject))
+
+                // want to lock obj, must can lockenable
+                if(pi.lockRune && pi.playerStasisEnable && currObj == crossObject)
                 {
-                    
-                    if(tmp!=null)
+                    if( stasisedObject == null )
                     {
-                        tmp.ChangeStasisState();
-                        if (tmp.beStasised)
-                        {
-                            // Object be locked
-                            stasisedObject = staticedObject;
-                        }
+                        stasisedObject = crossObject;
+                        crossObjPtr.ChangeStasisState();
+                    }
+                    else if( stasisedObject != null && crossObject == stasisedObject)
+                    {
+                        print("Lock free!");
+                        stasisedObject.GetComponent<StasisObject1Mat>().ChangeStasisState();
+                        stasisedObject = null;
                     }
                 }
             }
         }
+        // dont cross
         else
         {
-            if(staticedObject != null)
+            uiController.ResetTarget();
+            uiController.ResetLockedTarget();
+            if(crossObject != null)
             {
-                StasisObject1Mat tmp = staticedObject.GetComponent<StasisObject1Mat>();
+                StasisObject1Mat tmp = crossObject.GetComponent<StasisObject1Mat>();
                 //tmp.beStasisWatch = false;
                 if(tmp!=null)
                 {
@@ -140,12 +148,13 @@ public class StasisCameraController : MonoBehaviour
                 //}
 
             }
-            staticedObject = null;
+            crossObject = null;
         }
     }
 
     public void ResetRuneCamera()
     {
         mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 60, 0.5f);
+        uiController.ExitStasis();
     }
 }
